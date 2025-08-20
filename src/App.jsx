@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import { Button } from "./components/ui/button"
+import Hero from "./components/Hero";
 
 function App() {
 
@@ -24,15 +25,7 @@ function App() {
   return (
     <>
     <Navbar data={user2} color={"red"} />
-      <p>
-        First Name: {user.firstName} <br />
-        Last Name: {user.lastName} <br />
-        Age: {user.age} <br />
-        Address: {user.address}<br />
-        count: {count}
-      </p>
-      <Button onClick={()=>{setCount( count+5 )}} >Add</Button>
-      <Navbar data={user} color={"blue"} />
+    <Hero />
     </>
   )
 }
