@@ -20,7 +20,9 @@ const Navbar = ({data, color}) => {
         <a href="#">Contact</a>
       </div>
       <div>
-        <Button className={"cursor-pointer"}>Sign in</Button>
+        <a href="/login">
+          <Button className={"cursor-pointer"}>Sign in</Button>
+        </a>
       </div>
     </div>
 
