@@ -1,3 +1,4 @@
+import FamousTrips from '@/components/landingComponents/FamousTrips'
 import Features from '@/components/landingComponents/Features'
 import Hero from '@/components/landingComponents/Hero'
 import Navbar from '@/components/landingComponents/Navbar'
@@ -9,6 +10,7 @@ const LandingPage = () => {
         <Navbar />
         <Hero />
         <Features />
+        <FamousTrips />
     </>
   )
 }
