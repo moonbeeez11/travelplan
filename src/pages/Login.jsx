@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const  {login}  = useAuth();
+    const { data, loading, error } = useApi()
   const navigate = useNavigate();
 
 
