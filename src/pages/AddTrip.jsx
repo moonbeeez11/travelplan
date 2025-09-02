@@ -1,4 +1,3 @@
-import { AddTripForm } from '@/components/trips/AddTripForm'
 import { TripForm } from '@/components/trips/TripForm'
 import React from 'react'
 
