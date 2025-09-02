@@ -7,6 +7,7 @@ import useAuth from "./hooks/useAuth"
 import { jwtDecode } from "jwt-decode"
 import AppLayout from "./components/layout/AppLayout"
 import Trips from "./pages/Trips"
+import AddTrip from "./pages/AddTrip"
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/trips" element={<Trips />} />
+        <Route path="/trips/add" element={<AddTrip />} />
 
       </Route>
    </Routes>
