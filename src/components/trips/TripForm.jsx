@@ -71,7 +71,7 @@ export function TripForm({ initialData }) {
             if (response.data._id) {
                 toast.success("Trip created successfully!");
                 navigate(`/trips/${response.data._id}`);
-            }else{
+            } else {
                 toast.error("Failed to create trip");
             }
         } catch (error) {
@@ -80,9 +80,29 @@ export function TripForm({ initialData }) {
         }
     }
 
+    const onEdit = async (data) => {
+        try {
+            const response = await api.put(`/trips/${initialData._id}`, data);
+            console.log(response)
+            if (response.data._id) {
+                toast.success("Trip updated successfully!");
+                navigate(`/trips/${response.data._id}`);
+            } else {
+                toast.error("Failed to update trip");
+            }
+        } catch (error) {
+            console.error('Error updating trip:', error);
+            toast.error("An error occurred while updating the trip");
+        }
+    }
+
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={
+                    initialData ? form.handleSubmit(onEdit) : form.handleSubmit(onSubmit)
+                }
+                className="space-y-8">
                 {/* Basic Trip Information */}
                 <Card>
                     <CardHeader>
@@ -179,7 +199,7 @@ export function TripForm({ initialData }) {
                             </Button>
                         </CardTitle>
                         <CardDescription>
-                            Add at least one destination for your trip. 
+                            Add at least one destination for your trip.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">

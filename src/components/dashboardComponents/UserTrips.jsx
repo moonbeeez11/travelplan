@@ -16,7 +16,6 @@ import { Badge } from '../ui/badge'
 
 const UserTrips = () => {
     const { data, loading, error } = useApi("/trips");
-    console.log(data);
 
     function formatDate(isoString) {
   const date = new Date(isoString);
@@ -32,7 +31,6 @@ const UserTrips = () => {
 
     return (
         <section>
-            <h2 className="text-2xl font-bold mb-4">Your Trips</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 {
                     data.map((trip) => {
@@ -75,10 +73,12 @@ const UserTrips = () => {
                                     </div>
 
                                     <div className="flex gap-2">
+                                        <a href={`/trips/${trip._id}`} className='w-full'>
                                         <Button className="w-full">
                                             <Plane className="mr-2 h-4 w-4" />
                                             View Trip
                                         </Button>
+                                        </a>
                                     </div>
                                 </CardContent>
                             </Card>

@@ -12,7 +12,6 @@ const AddTrip = () => {
         </p>
       </div>
       <section className='mt-6'>
-        {/* <AddTripForm /> */}
     <TripForm />
       </section>
       </section>
