@@ -10,6 +10,7 @@ import Trips from "./pages/Trips"
 import AddTrip from "./pages/AddTrip"
 import TripInfo from "./pages/TripInfo"
 import EditTrip from "./pages/EditTrip"
+import PackingPage from "./pages/Packing"
 
 function App() {
 
@@ -56,7 +57,7 @@ function App() {
         <Route path="/trips/add" element={<AddTrip />} />
         <Route path="/trips/edit/:id" element={<EditTrip />} />
         <Route path="/trips/:id" element={<TripInfo />} />
-
+        <Route path="/packing" element={<PackingPage />} />
       </Route>
    </Routes>
    </BrowserRouter>
