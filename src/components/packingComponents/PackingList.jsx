@@ -25,11 +25,16 @@ const PackingList = ({ selectedTripId }) => {
 
   const { loading, error, data: packingItems } = useApi(`/package-lists/${selectedTripId}`, {}, [dependancy] );
 
+  // dialog box close or open
   const [isAddingItem, setIsAddingItem] = useState(false);
+
+  //dialog box opended for editing?
   const [isEditing, setIsEditing] = useState(false);
+
+  // store item info, if selected for editing
   const [selectedItem, setSelectedItem] = useState(null);
 
-
+// input field inside dialog form
   const [newItemName, setNewItemName] = useState("");
 
 
@@ -67,7 +72,6 @@ const PackingList = ({ selectedTripId }) => {
   }
 
 const editPackingItem = async () => {
-  
     try {
       const response = await api.patch(`/package-lists/${selectedTripId}/${selectedItem._id}`, { name: newItemName });
 
@@ -87,6 +91,24 @@ const editPackingItem = async () => {
     setNewItemName("");
   }
 
+  const toggleCompleted = async (id, completedValue) => {
+    try {
+      const response = await api.patch(`/package-lists/${selectedTripId}/${id}`, { completed: completedValue });
+
+      if (response.data?._id) {
+        toast.success("Item Packed!");
+        setDependancy(dependancy+1);
+      }
+      else{
+         toast.error("Failed to update status");
+      }
+
+    } catch (error) {
+      console.log("Some error occured", error);
+      toast.error("Some error occured! Try again later.")
+    }
+  }
+
   const getDateDisplay = (dateString) => {
     if (!dateString) return "No date"
     try {
@@ -103,7 +125,7 @@ const editPackingItem = async () => {
       {/* Trip Info & Progress */}
 
 
-      {/* Add Item Button */}
+      {/* Packing item dialog */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Packing Items</h2>
         <Dialog open={isAddingItem} onOpenChange={setIsAddingItem}>
@@ -173,7 +195,7 @@ const editPackingItem = async () => {
 
                 {/* left  */}
                 <div className="flex items-center gap-4">
-                  <Checkbox checked={item.completed} />
+                  <Checkbox className="h-6 w-6 shadow-md" checked={item.completed} onClick={()=>{toggleCompleted(item._id, !item.completed)}} />
                   <p className="text-lg font-semibold">{item.name}</p>
                 </div>
 
