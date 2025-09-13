@@ -6,9 +6,9 @@ const AddItinerary = () => {
         <main className='px-20 py-6 bg-gray-50'>
             <section className='border rounded-md p-6 max-w-2xl mx-auto bg-white'>
                 <div>
-                    <h1 className='text-2xl font-bold'>Add Your Trip</h1>
+                    <h1 className='text-2xl font-bold'>Add Your Itineraries</h1>
                     <p className='text-sm text-gray-400'>
-                        Plan your next adventure with WanderWise!
+                        Plan your adventure with WanderWise!
                     </p>
                 </div>
                 <section className='mt-6'>

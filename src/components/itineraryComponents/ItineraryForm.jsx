@@ -9,6 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Plus, Trash2, Clock, X, StickyNote } from "lucide-react"
+import api from "@/api/axios"
+import { toast } from "sonner"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 const activitySchema = z.object({
   name: z.string().min(1, "Activity name is required"),
@@ -26,11 +29,16 @@ const itinerarySchema = z.object({
 
 
 export function ItineraryForm({
-  tripId,
   isLoading,
   initialData,
   mode
 }) {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tripId = searchParams.get("tripId")
+
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(itinerarySchema),
     defaultValues: initialData || { 
@@ -47,9 +55,21 @@ export function ItineraryForm({
     },
   })
 
-  const onSubmit = (data)=>{
-    console.log(data)
-  }
+ const onSubmit = async (data) => {
+        try {
+            const response = await api.post(`/itineraries/${tripId}`, data);
+            console.log(response)
+            if (response.data._id) {
+                toast.success("Itinerary created successfully!");
+                navigate(`/itineraries/${response.data._id}`);
+            } else {
+                toast.error("Failed to create itinerary");
+            }
+        } catch (error) {
+            console.error('Error creating trip:', error);
+            toast.error("An error occurred while creating the itinerary");
+        }
+    }
 
   const {
     fields: activityFields,
@@ -180,6 +200,7 @@ function ActivityCard({
   onRemove,
   canRemove,
 }) {
+
   const {
     fields: noteFields,
     append: appendNote,
@@ -235,7 +256,7 @@ function ActivityCard({
                 Time
               </FormLabel>
               <FormControl>
-                <Input type="time" {...field} />
+                <Input placeholder="9 AM Morning" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -273,7 +294,7 @@ function ActivityCard({
               <Button
                 type="button"
                 onClick={() => removeNote(noteIndex)}
-                size="sm"
+                size="icon"
                 variant="outline"
                 className="text-red-600 hover:text-red-700"
               >
