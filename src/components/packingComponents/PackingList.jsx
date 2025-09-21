@@ -196,6 +196,7 @@ const editPackingItem = async () => {
                 {/* left  */}
                 <div className="flex items-center gap-4">
                   <Checkbox className="h-6 w-6 shadow-md" checked={item.completed} onClick={()=>{toggleCompleted(item._id, !item.completed)}} />
+                    
                   <p className="text-lg font-semibold">{item.name}</p>
                 </div>
 
@@ -215,8 +216,6 @@ const editPackingItem = async () => {
                   </Button>
 
                 </div>
-
-                
                   
                 </div>
 

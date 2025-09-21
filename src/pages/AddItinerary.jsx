@@ -12,7 +12,8 @@ const AddItinerary = () => {
                     </p>
                 </div>
                 <section className='mt-6'>
-                    <ItineraryForm mode="add" isLoading={false} onSubmit={(data)=>{console.log(data)}} tripId={12345}/>
+                    <ItineraryForm />
+                   
                 </section>
             </section>
         </main>

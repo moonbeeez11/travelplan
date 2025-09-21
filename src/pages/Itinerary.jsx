@@ -1,7 +1,7 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent} from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
     Select,
@@ -11,16 +11,26 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-import {  Plus, Box } from "lucide-react"
+import { Plus, Box } from "lucide-react"
 import useApi from "@/hooks/useApi"
 import Loading from "@/components/shared/Loading"
 import ItinerarySection from "@/components/itineraryComponents/ItinerarySection"
+import { useSearchParams } from "react-router-dom"
 
-export default function ItineraryPage() {
+export default function ItineraryPage() {    
 
     const { data: trips, error, loading } = useApi("/trips");
 
-    const [selectedTripId, setSelectedTripId] = useState("");
+    const [selectedTripId, setSelectedTripId] = useState("");//update garna
+
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {//useefect vitra tripid lai update garim
+        const tripId = searchParams.get("tripId");
+        if (tripId) {
+            setSelectedTripId(tripId);
+        }
+    }, [searchParams]);
 
     if (loading) return <Loading />
 
@@ -51,12 +61,12 @@ export default function ItineraryPage() {
                         <SelectContent>
                             <SelectItem value={null}>Select a trip</SelectItem>
                             {
-                            
-                            trips.map((trip) => (
-                                <SelectItem key={trip._id} value={trip._id}>
-                                    {trip.title}
-                                </SelectItem>
-                            ))
+
+                                trips.map((trip) => (
+                                    <SelectItem key={trip._id} value={trip._id}>
+                                        {trip.title}
+                                    </SelectItem>
+                                ))
 
                             }
                         </SelectContent>
@@ -66,7 +76,7 @@ export default function ItineraryPage() {
 
                 {
                     selectedTripId ? (
-                    <ItinerarySection selectedTripId={selectedTripId} trips={trips} />
+                        <ItinerarySection selectedTripId={selectedTripId} trips={trips} />
                     ) : (
                         <Card>
                             <CardContent className="text-center py-12">

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import useAuth from '@/hooks/useAuth';
 
 const AppNavbar = () => {
-    const {logout} = useAuth();
+    const {logout} = useAuth();//logout option for navbar in nav
   return (
     <header className='flex items-center justify-between py-4 px-8 border-b'>
         <div className='flex items-center gap-4'>

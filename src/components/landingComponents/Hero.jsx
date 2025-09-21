@@ -20,8 +20,8 @@ const Hero = () => {
                     Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit officiis dolorum qui libero recusandae eaque ab eligendi incidunt, error explicabo, nemo tenetur Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maxime, amet!
                 </p>
                 <div className='flex items-center gap-4'>
-                    <Button size={"lg"}>Explore Trips</Button>
-                    <Button size="lg" variant={"outline"} className="bg-transparent">Register</Button>
+                    <a href="/trips"><Button size={"lg"}>Explore Trips</Button></a>
+                    <a href="/signup"><Button size="lg" variant={"outline"} className="bg-transparent">Register</Button></a>
                 </div>
             </div>
 

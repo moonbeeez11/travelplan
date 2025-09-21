@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import api from '@/api/axios';
 import Loading from '@/components/shared/Loading';
 import { Button } from '@/components/ui/button'
@@ -20,17 +20,23 @@ import {
     Download,
     Clock,
     Target,
+    User,
+    ExternalLink,
 } from "lucide-react"
+import AddExpense from '@/components/trips/AddExpense';
+import InviteCollaborator from '@/components/trips/InviteCollaborator';
+import AddFile from '@/components/trips/AddFile';
 
 
 const TripInfo = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const { data: trip, error, loading } = useApi(`/trips/${id}`);
+    const [dependancy, setDependancy] = useState(0);
+
+    const { data: trip, error, loading } = useApi(`/trips/${id}`, {}, [dependancy]);
 
     if (loading) return <Loading text='Loading trip details...' />
-    console.log(trip);
 
     const deleteTrip = async () => {
         try {
@@ -72,13 +78,23 @@ const TripInfo = () => {
         return trip.budget.total - trip.budget.spent
     }
 
+    const checkImage = (url) => {
+        const parts = url.split(".");
+        const ext = parts[parts.length - 1]
+
+        if (["png", "jpg", "jpeg", "gif", "heif"].includes(ext.toLowerCase())) {
+            return true
+        } else {
+            return false;
+        }
+    }
 
     if (error || !trip) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">Trip Not Found</h2>
-                    <p className="text-gray-600 mb-4">{error || "The requested trip could not be found."}</p>
+                    <p className="text-gray-600 mb-4">{ "The requested trip could not be found."}</p>
                     <a href="/dashboard">
                         <Button>Back to Dashboard</Button>
                     </a>
@@ -113,7 +129,7 @@ const TripInfo = () => {
                                                 Edit Trip
                                             </Button>
                                         </a>
-                                        <Button variant="outline" size="sm" onClick={deleteTrip}>
+                                        <Button variant="outline" size="sm" onClick={deleteTrip} className={"text-red-600 hover:text-red-600 hover:bg-red-50"}>
                                             <Trash2 className="mr-2 h-4 w-4" />
                                             Delete
                                         </Button>
@@ -224,11 +240,11 @@ const TripInfo = () => {
                                     <div>
                                         <h4 className="font-semibold mb-3">Recent Expenses</h4>
                                         <div className="space-y-2">
-                                            {trip.budget.expenses.slice(0, 3).map((expense, index) => (
+                                            {trip.budget.expenses.map((expense, index) => (
                                                 <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                                                     <div>
                                                         <p className="font-medium">{expense.name}</p>
-                                                        <p className="text-sm text-gray-600">{new Date(expense.date).toLocaleDateString()}</p>
+                                                        <p className="text-sm text-gray-600">{new Date(expense.date).toLocaleString()}</p>
                                                     </div>
                                                     <p className="font-semibold">${expense.amount}</p>
                                                 </div>
@@ -245,13 +261,12 @@ const TripInfo = () => {
                                             <h3 className="text-lg font-semibold">Collaborators</h3>
                                         </div>
                                         <div className="flex flex-wrap gap-3">
-                                            {trip.collaborators.map((email, index) => (
+                                            {trip.collaborators.map((id, index) => (
                                                 <div key={index} className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
-                                                    <Avatar className="h-8 w-8">
-                                                        <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${email}`} />
-                                                        <AvatarFallback>{email.charAt(0).toUpperCase()}</AvatarFallback>
-                                                    </Avatar>
-                                                    <span className="text-sm">{email}</span>
+                                                    <div className='p-2 bg-amber-400 rounded-full'>
+                                                        <User className='w-4 h-4' />
+                                                    </div>
+                                                    <span className="text-sm">{id}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -266,17 +281,35 @@ const TripInfo = () => {
                                             <h3 className="text-lg font-semibold">Files & Documents</h3>
                                         </div>
                                         <div className="grid md:grid-cols-2 gap-3">
-                                            {trip.files.map((file, index) => (
-                                                <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                                                    <div className="flex items-center space-x-2">
-                                                        <FileText className="h-4 w-4 text-gray-400" />
-                                                        <span className="text-sm">{file.url.split("/").pop()}</span>
-                                                    </div>
-                                                    <Button variant="ghost" size="sm">
-                                                        <Download className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            ))}
+                                            {trip.files.map((file, index) => {
+                                                if (checkImage(file)) {
+                                                    return (
+                                                        <div key={index}>
+                                                            <img src={file} alt={file} className='w-full' />
+                                                        </div>
+                                                    )
+                                                }
+                                                else {
+                                                    return (
+                                                        <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                                                            <div className="flex items-center space-x-2">
+                                                                <FileText className="h-4 w-4 text-gray-400" />
+                                                                <span className="text-xs">{file}</span>
+                                                            </div>
+                                                            <a href={file} target='_blank'>
+                                                            <Button variant="ghost" size="sm">
+                                                                <ExternalLink className="h-4 w-4" />
+                                                            </Button>
+                                                            </a>
+                                                        </div>
+                                                    )
+                                                }
+
+                                            }
+
+                                            )
+
+                                            }
                                         </div>
                                     </div>
                                 )}
@@ -308,6 +341,13 @@ const TripInfo = () => {
                             </CardContent>
                         </Card>
 
+                        {/* add expense  */}
+                        <AddExpense tripId={id} dependancy={dependancy} setDependancy={setDependancy} />
+
+                        {/* invite collaborator  */}
+                        <InviteCollaborator tripId={id} />
+
+                        <AddFile tripId={id} dependancy={dependancy} setDependancy={setDependancy} />
                     </div>
                 </div>
             </div>
@@ -316,4 +356,3 @@ const TripInfo = () => {
 }
 
 export default TripInfo;
-

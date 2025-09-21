@@ -13,18 +13,20 @@ import EditTrip from "./pages/EditTrip"
 import PackingPage from "./pages/Packing"
 import ItineraryPage from "./pages/Itinerary"
 import AddItinerary from "./pages/AddItinerary"
+import EditItinerary from "./pages/EditItinerary"
+import AcceptInvitation from "./pages/AcceptInvitation"
 
 function App() {
 
 
  const { token, logout } = useAuth();
 
-  const ProtectedRoutes = () => {
+  const ProtectedRoutes = () => {//authentication check
     try {
       const decodedToken = token ? jwtDecode(token) : null;
       const userId = decodedToken?.userId;
 
-      if (decodedToken && decodedToken.exp) {
+      if (decodedToken && decodedToken.exp) {//token expire hunxa logout hunxa
         const currentTime = Date.now() / 1000;
         if (currentTime > decodedToken?.exp) {
           logout();
@@ -37,7 +39,7 @@ function App() {
         return <Navigate to="/login" />;
       }
 
-      return <AppLayout />;
+      return <AppLayout />;//token ako xa vane
     } catch (err) {
       console.error(err);
       logout();
@@ -58,10 +60,12 @@ function App() {
         <Route path="/trips" element={<Trips />} />
         <Route path="/trips/add" element={<AddTrip />} />
         <Route path="/trips/edit/:id" element={<EditTrip />} />
+        <Route path="/trips/:id/invite/accept" element={<AcceptInvitation />} />
         <Route path="/trips/:id" element={<TripInfo />} />
         <Route path="/packing" element={<PackingPage />} />
         <Route path="/itineraries" element={<ItineraryPage />} />
         <Route path="/itineraries/add" element={<AddItinerary />} />
+        <Route path="/itineraries/edit/:id" element={<EditItinerary />} />
       </Route>
    </Routes>
    </BrowserRouter>

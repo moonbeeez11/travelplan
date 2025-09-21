@@ -29,9 +29,8 @@ const itinerarySchema = z.object({
 
 
 export function ItineraryForm({
-  isLoading,
+  
   initialData,
-  mode
 }) {
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,7 +60,7 @@ export function ItineraryForm({
             console.log(response)
             if (response.data._id) {
                 toast.success("Itinerary created successfully!");
-                navigate(`/itineraries/${response.data._id}`);
+                navigate(`/itineraries`);
             } else {
                 toast.error("Failed to create itinerary");
             }
@@ -70,6 +69,23 @@ export function ItineraryForm({
             toast.error("An error occurred while creating the itinerary");
         }
     }
+
+     const editItinerary = async (data) => {
+        try {
+            const response = await api.patch(`/itineraries/${tripId}/${initialData._id}`, data);
+            if (response.data._id) {
+                toast.success("Itinerary updated successfully!");
+                navigate(`/itineraries`);
+            } else {
+                toast.error("Failed to update itinerary");
+                console.log(response)
+            }
+        } catch (error) {
+            console.error('Error creating trip:', error);
+            toast.error("An error occurred while updating the itinerary");
+        }
+    }
+
 
   const {
     fields: activityFields,
@@ -92,7 +108,9 @@ export function ItineraryForm({
     <div className="max-w-4xl mx-auto p-6">
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(
+          initialData? editItinerary : onSubmit
+        )} className="space-y-6">
           {/* Basic Information */}
           <Card>
             <CardHeader>
@@ -177,15 +195,9 @@ export function ItineraryForm({
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading} size="lg">
-              {isLoading
-                ? mode === "edit"
-                  ? "Updating..."
-                  : "Creating..."
-                : mode === "edit"
-                  ? "Update Itinerary"
-                  : "Create Itinerary"}
-            </Button>
+             <Button type="submit" size="lg">
+              Submit
+              </Button>
           </div>
         </form>
       </Form>

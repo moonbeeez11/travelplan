@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent} from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -15,12 +15,21 @@ import {  Plus, Box } from "lucide-react"
 import useApi from "@/hooks/useApi"
 import Loading from "@/components/shared/Loading"
 import PackingList from "@/components/packingComponents/PackingList"
+import { useSearchParams } from "react-router-dom"
 
 export default function PackingPage() {
 
     const { data: trips, error, loading } = useApi("/trips");
 
     const [selectedTripId, setSelectedTripId] = useState("");
+        const [searchParams] = useSearchParams();
+
+     useEffect(() => {//useefect vitra tripid lai update garim
+            const tripId = searchParams.get("tripId");//tripid matra de
+            if (tripId) {
+                setSelectedTripId(tripId);
+            }
+        }, [searchParams]);//quesmark dehi j xa serch param
 
     if (loading) return <Loading />
 
