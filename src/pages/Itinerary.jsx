@@ -62,8 +62,8 @@ export default function ItineraryPage() {
                             <SelectItem value={null}>Select a trip</SelectItem>
                             {
 
-                                trips.map((trip) => (
-                                    <SelectItem key={trip._id} value={trip._id}>
+                                trips.map((trip, index) => (
+                                    <SelectItem key={index} value={trip._id}>
                                         {trip.title}
                                     </SelectItem>
                                 ))

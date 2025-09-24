@@ -23,13 +23,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 const ItinerarySection = ({ selectedTripId, trips }) => {
+  console.log("Selected Trip ID in ItinerarySection:", selectedTripId);
   const {
     data: itineraries,
     loading,
     error,
   } = useApi(`/itineraries/${selectedTripId}`, {}, [selectedTripId]);
 
-  const selectedTrip = trips.find((item) => (item._id = selectedTripId));
+  const selectedTrip = trips.find((item) => (item._id == selectedTripId));
 
   const getDaysArray = (startDate, endDate) => {
     const start = new Date(startDate);
